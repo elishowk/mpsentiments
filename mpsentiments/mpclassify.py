@@ -58,14 +58,18 @@ def features_gen(config):
     Reads the training data set and yields feature sets associated with class labels
     """
     ratingsmean = get_ratingsmean(config)
-    comments = mpdata.Comments(join(config['data_path'],config['training']['Comments']), dialect="excel")
-    for com in comments:
+    logging.debug("middle rating value used for training = %d"%ratingsmean)
+    sourcetype = config['training']['type']
+    path = join( config['data_path'], config['training']['path'] )
+    dataclass = _dynamic_get_class("mpdata", sourcetype)
+    data = dataclass( path,  dialect="excel")
+    for com in data:
         if 'rating' in com:
             if com['rating'] >= ratingsmean:
                 yield (word_feats(mptokenize.tokenize(com['body'])), 'pos')
             else:
                 yield (word_feats(mptokenize.tokenize(com['body'])), 'neg')
-    logging.debug("total of bad lines : %d"%comments.impossible_line)
+    logging.debug("total of bad lines : %d"%data.impossible_line)
 
 def train_classifier(config):
     """

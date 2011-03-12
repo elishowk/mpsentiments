@@ -52,19 +52,12 @@ def main(config):
     classifier = mpclassify.train_classifier(config)
     dbconnect = mpdata.Database(config)
     articletokens_gen = articles_gen(config, dbconnect)
-    #import pdb
-    #pdb.set_trace()
+
     logging.debug("start classifying input data set")
-    #results = []
     try:
         while 1:
             (id, tokens) = articletokens_gen.next()
             predict_class = classifier.classify( mpclassify.word_feats(tokens) )
-            #logging.debug(predict_class)
-            #results += [(id, predict_class)]
             dbconnect.write_class((id, predict_class))
-            #results.write( '"%s","%s"\n'%( predict_class, " ".join(tokens) ) )
     except StopIteration:
-        #results.close()
-        #dbconnect.write_class(results)
         return

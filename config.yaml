@@ -1,6 +1,7 @@
 ---
 classifier: 'NaiveBayesClassifier.pickle'
 ratingsmean: 'RatingsMeans.pickle'
+#fixedrating: 0.5
 data_path: 'data'
 training:
   type: 'Comments'
