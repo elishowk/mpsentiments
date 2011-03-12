@@ -1,0 +1,21 @@
+---
+classifier: 'NaiveBayesClassifier.pickle'
+ratingsmean: 'RatingsMeans.pickle'
+data_path: 'data'
+training:
+  type: 'Comments'
+  path: "comments_with_ratings_clean.csv"
+  #negative: 'SentiWS_v1.8b_Negative.txt'
+  #positive: 'SentiWS_v1.8b_Positive.txt'
+input:
+  users: "data/users.txt"
+  mysql:
+    database: "mp"
+    user: "root"
+    password: "root"
+    table: "articles"
+    contents:
+      - "id"
+      - "body"
+      - "title"
+output: "chart-json.js"

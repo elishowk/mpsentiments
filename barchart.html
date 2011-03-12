@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <title>Movie articles sentiment analysis</title>
+<!--    <link type="text/css" rel="stylesheet" href="../ex.css"/>-->
+    <script type="text/javascript" src="protovis-r3.2.js"></script>
+    <script type="text/javascript" src="chart-json.js"></script>
+    <style type="text/css">
+
+#fig {
+  width: 1280px;
+  height: 900px;
+}
+
+    </style>
+  </head>
+  <body>
+      <h3>Articles, raw results </h3>
+      <p>In green, the total of predicted positives, in red, the total of predictives negatives</p>
+    <div id="center"><div id="fig">
+    <script type="text/javascript+protovis">
+/*
+ * Sorts list of objects containing a text values, given a textkey
+ */
+function alphabeticListSort(listitems, textkey) {
+    listitems.sort(function(a, b) {
+        var compA = a[textkey];
+        var compB = b[textkey];
+        return (compA < compB) ? -1 : (compA >= compB) ? 1 : 0;
+    })
+    return listitems;
+
+}
+
+var data = alphabeticListSort(data, "positives");
+
+/* Sizing and scales. */
+var w = 800,
+    h = 400,
+    y = pv.Scale.ordinal(data, function(d) d.permalink).splitBanded(0, w);
+    x = pv.Scale.linear(0, 2300).range(0, h),
+    fill = pv.colors("red", "green");
+
+/* The root panel. */
+var vis = new pv.Panel()
+    .width(w)
+    .height(h)
+    .bottom(20)
+    .left(100)
+    .right(10)
+    .top(100);
+
+vis.add(pv.Layout.Stack)
+    .layers(classes)
+    .values(data)
+    .y(function(d) y(d.permalink))
+    .x(function(d, t) x(d[t]))
+  .layer.add(pv.Bar)
+    .antialias(false)
+    .width(x.range().band)
+    .fillStyle(fill.by(pv.parent))
+    .strokeStyle(function() this.fillStyle().darker())
+    .lineWidth(1)
+  .anchor("bottom").add(pv.Label)
+    //.visible(function() !this.parent.index && !(this.index % 3))
+    .textBaseline("top")
+    .textMargin(5)
+    .text(function(d) d.permalink);
+
+vis.add(pv.Rule)
+    .data(x.ticks(5))
+    .bottom(x)
+    .strokeStyle(function(i) i ? "rgba(255, 255, 255, .7)" : "black")
+  .anchor("right").add(pv.Label)
+    .textMargin(6);
+    
+vis.render();
+   </script>
+  </div></div>
+  </body>
+</html>
