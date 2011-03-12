@@ -7,8 +7,8 @@
     <style type="text/css">
 
 #fig {
-  width: 1280px;
-  height: 900px;
+  width: 800px;
+  height: 400px;
 }
 
     </style>
@@ -36,8 +36,8 @@ var data = alphabeticListSort(data, "positives");
 /* Sizing and scales. */
 var w = 800,
     h = 400,
-    y = pv.Scale.ordinal(data, function(d) d.permalink).splitBanded(0, w);
-    x = pv.Scale.linear(0, 2300).range(0, h),
+    x = pv.Scale.ordinal(data, function(d) d.permalink).splitBanded(0, w);
+    y = pv.Scale.linear(0, 2200).range(0, h),
     fill = pv.colors("red", "green");
 
 /* The root panel. */
@@ -52,8 +52,8 @@ var vis = new pv.Panel()
 vis.add(pv.Layout.Stack)
     .layers(classes)
     .values(data)
-    .y(function(d) y(d.permalink))
-    .x(function(d, t) x(d[t]))
+    .x(function(d) x(d.permalink))
+    .y(function(d, t) y(d[t]))
   .layer.add(pv.Bar)
     .antialias(false)
     .width(x.range().band)
@@ -67,10 +67,10 @@ vis.add(pv.Layout.Stack)
     .text(function(d) d.permalink);
 
 vis.add(pv.Rule)
-    .data(x.ticks(5))
-    .bottom(x)
+    .data(y.ticks(5))
+    .bottom(y)
     .strokeStyle(function(i) i ? "rgba(255, 255, 255, .7)" : "black")
-  .anchor("right").add(pv.Label)
+    .anchor("right").add(pv.Label)
     .textMargin(6);
     
 vis.render();
